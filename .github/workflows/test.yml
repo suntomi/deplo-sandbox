@@ -1,0 +1,55 @@
+name: Deplo CI/CD
+
+on: 
+  push:
+    branches: ["test"]
+  pull_request:
+    branches: ["test"]
+  
+jobs:
+  job1:
+    name: Start CI
+    runs-on: ubuntu-latest
+    container: ubuntu:22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # deplo needs to refer previous commit of current HEAD to determine diff
+          fetch-depth: 2
+      - name: Touch file
+        run: cat README.md | md5sum > checksum.text
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: checksum
+          path: |
+            checksum.text
+      - name: Setup ssh session to debug
+        if: ${{{{ failure() }}}}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          sudo: false
+  job2:
+    name: Start CI2
+    needs: job1
+    runs-on: ubuntu-latest
+    container: ubuntu:22.04
+    steps:
+      - name: Download checksum
+        uses: actions/download-artifact@v2
+        with:
+          name: checksum
+      - name: touch file
+        run: |
+          if [ "$(cat "checksum.txt)" = "$(cat README.md | md5sum)" ]; then
+            echo "ok"
+          else
+            echo "ng"
+            exit 1
+          fi
+      - name: Setup ssh session to debug
+        if: ${{{{ failure() }}}}
+        uses: mxschmitt/action-tmate@v3
+        with:
+          sudo: false
