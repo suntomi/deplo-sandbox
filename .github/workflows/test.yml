@@ -12,7 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     container: ubuntu:22.04
     steps:
+      - name: Cache repository
+        uses: actions/cache@v2
+        with:
+          path: .git
+          key: deplo-git-v1-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+          restore-keys:
+            deplo-git-v1-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+            deplo-git-v1-{{ arch }}-{{ .Branch }}-
+            deplo-git-v1-{{ arch }}-
       - name: Checkout
+        if: steps.cache-repository.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
         with:
           # deplo needs to refer previous commit of current HEAD to determine diff
@@ -36,6 +46,21 @@ jobs:
     runs-on: ubuntu-latest
     container: ubuntu:22.04
     steps:
+      - name: Cache repository
+        uses: actions/cache@v2
+        with:
+          path: .git
+          key: deplo-git-v1-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+          restore-keys:
+            deplo-git-v1-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+            deplo-git-v1-{{ arch }}-{{ .Branch }}-
+            deplo-git-v1-{{ arch }}-
+      - name: Checkout
+        if: steps.cache-repository.outputs.cache-hit != 'true'
+        uses: actions/checkout@v2
+        with:
+          # deplo needs to refer previous commit of current HEAD to determine diff
+          fetch-depth: 2
       - name: Download checksum
         uses: actions/download-artifact@v2
         with:
