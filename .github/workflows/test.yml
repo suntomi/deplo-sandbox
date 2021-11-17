@@ -26,7 +26,7 @@ jobs:
           path: |
             checksum.text
       - name: Setup ssh session to debug
-        if: ${{{{ failure() }}}}
+        if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         with:
           sudo: false
@@ -49,7 +49,7 @@ jobs:
             exit 1
           fi
       - name: Setup ssh session to debug
-        if: ${{{{ failure() }}}}
+        if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
         with:
           sudo: false
