@@ -16,11 +16,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .git
-          key: deplo-git-v1-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+          key: deplo-git-v1-${{ runner.os }}-${{ github.ref_name }}-${{ github.ref }}
           restore-keys:
-            deplo-git-v1-{{ arch }}-{{ .Branch }}-{{ .Revision }}
-            deplo-git-v1-{{ arch }}-{{ .Branch }}-
-            deplo-git-v1-{{ arch }}-
+            deplo-git-v1-${{ runner.os }}-${{ github.ref_name }}-${{ github.ref }}
+            deplo-git-v1-${{ runner.os }}-${{ github.ref_name }}-
+            deplo-git-v1-${{ runner.os }}-
       - name: Checkout
         if: steps.cache-repository.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
@@ -50,11 +50,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .git
-          key: deplo-git-v1-{{ arch }}-{{ .Branch }}-{{ .Revision }}
+          key: deplo-git-v1-${{ runner.os }}-${{ github.ref_name }}-${{ github.ref }}
           restore-keys:
-            deplo-git-v1-{{ arch }}-{{ .Branch }}-{{ .Revision }}
-            deplo-git-v1-{{ arch }}-{{ .Branch }}-
-            deplo-git-v1-{{ arch }}-
+            deplo-git-v1-${{ runner.os }}-${{ github.ref_name }}-${{ github.ref }}
+            deplo-git-v1-${{ runner.os }}-${{ github.ref_name }}-
+            deplo-git-v1-${{ runner.os }}-
       - name: Checkout
         if: steps.cache-repository.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
