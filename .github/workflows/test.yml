@@ -28,13 +28,13 @@ jobs:
           # deplo needs to refer previous commit of current HEAD to determine diff
           fetch-depth: 2
       - name: Touch file
-        run: cat README.md | md5sum > checksum.text
+        run: cat README.md | md5sum > checksum.txt
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
           name: checksum
           path: |
-            checksum.text
+            checksum.txt
       - name: Setup ssh session to debug
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
@@ -67,7 +67,7 @@ jobs:
           name: checksum
       - name: touch file
         run: |
-          if [ "$(cat "checksum.txt)" = "$(cat README.md | md5sum)" ]; then
+          if [ "$(cat checksum.txt)" = "$(cat README.md | md5sum)" ]; then
             echo "ok"
           else
             echo "ng"
