@@ -73,6 +73,9 @@ jobs:
             echo "ng"
             exit 1
           fi
+      - name: install git
+        run: |
+          apt-get update && apt-get install -y git
       - name: show diff
         run: |
           echo "===== diff start ====="
