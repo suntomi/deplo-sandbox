@@ -10,9 +10,9 @@ jobs:
   job1:
     name: Start CI
     runs-on: ubuntu-latest
-    container: ubuntu:22.04
     steps:
-      - name: Cache repository
+      - name: Fetch repository cache
+        id: fetch-repository-cache
         uses: actions/cache@v2
         with:
           path: .git
@@ -22,11 +22,14 @@ jobs:
             deplo-git-v1-${{ runner.os }}-${{ github.ref }}-
             deplo-git-v1-${{ runner.os }}-
       - name: Checkout
-        if: steps.cache-repository.outputs.cache-hit != 'true'
+        if: steps.fetch-repository-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
         with:
           # deplo needs to refer previous commit of current HEAD to determine diff
           fetch-depth: 2
+      - name: Restore repository from cache
+        if: steps.fetch-repository-cache.outputs.cache-hit == 'true'
+        run: git reset --hard HEAD
       - name: Touch file
         run: cat README.md | md5sum > checksum.txt
       - name: Archive artifacts
@@ -38,15 +41,13 @@ jobs:
       - name: Setup ssh session to debug
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
-        with:
-          sudo: false
   job2:
     name: Start CI2
     needs: job1
     runs-on: ubuntu-latest
-    container: ubuntu:22.04
     steps:
-      - name: Cache repository
+      - name: Fetch repository cache
+        id: fetch-repository-cache
         uses: actions/cache@v2
         with:
           path: .git
@@ -56,11 +57,14 @@ jobs:
             deplo-git-v1-${{ runner.os }}-${{ github.ref }}-
             deplo-git-v1-${{ runner.os }}-
       - name: Checkout
-        if: steps.cache-repository.outputs.cache-hit != 'true'
+        if: steps.fetch-repository-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
         with:
           # deplo needs to refer previous commit of current HEAD to determine diff
           fetch-depth: 2
+      - name: Restore repository from cache
+        if: steps.fetch-repository-cache.outputs.cache-hit == 'true'
+        run: git reset --hard HEAD
       - name: Download checksum
         uses: actions/download-artifact@v2
         with:
@@ -73,8 +77,11 @@ jobs:
             echo "ng"
             exit 1
           fi
+      - name: show diff
+        run: |
+          echo "===== diff start ====="
+          git --no-pager diff HEAD^..HEAD
+          echo "===== diff end ====="
       - name: Setup ssh session to debug
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
-        with:
-          sudo: false
