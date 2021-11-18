@@ -16,10 +16,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .git
-          key: deplo-git-v1-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
+          key: deplo-git-v1-${{ runner.os }}-${{ github.sha }}
           restore-keys:
-            deplo-git-v1-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
-            deplo-git-v1-${{ runner.os }}-${{ github.ref }}-
             deplo-git-v1-${{ runner.os }}-
       - name: Checkout
         if: steps.fetch-repository-cache.outputs.cache-hit != 'true'
@@ -51,10 +49,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: .git
-          key: deplo-git-v1-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
+          key: deplo-git-v1-${{ runner.os }}-${{ github.sha }}
           restore-keys:
-            deplo-git-v1-${{ runner.os }}-${{ github.ref }}-${{ github.sha }}
-            deplo-git-v1-${{ runner.os }}-${{ github.ref }}-
             deplo-git-v1-${{ runner.os }}-
       - name: Checkout
         if: steps.fetch-repository-cache.outputs.cache-hit != 'true'
