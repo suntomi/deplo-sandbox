@@ -10,7 +10,6 @@ jobs:
   job1:
     name: Start CI
     runs-on: ubuntu-latest
-    container: ubuntu:22.04
     steps:
       - name: Cache repository
         uses: actions/cache@v2
@@ -44,7 +43,6 @@ jobs:
     name: Start CI2
     needs: job1
     runs-on: ubuntu-latest
-    container: ubuntu:22.04
     steps:
       - name: Cache repository
         uses: actions/cache@v2
@@ -73,9 +71,6 @@ jobs:
             echo "ng"
             exit 1
           fi
-      - name: install git
-        run: |
-          apt-get update && apt-get install -y git
       - name: show diff
         run: |
           echo "===== diff start ====="
