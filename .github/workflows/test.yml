@@ -72,7 +72,7 @@ jobs:
       - name: show diff
         run: |
           echo "===== diff start ====="
-          git diff --no-pager fix-test...test
+          git --no-pager diff HEAD^..HEAD
           echo "===== diff end ====="
       - name: Setup ssh session to debug
         if: ${{ failure() }}
