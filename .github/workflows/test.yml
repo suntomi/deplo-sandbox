@@ -11,7 +11,8 @@ jobs:
     name: Start CI
     runs-on: ubuntu-latest
     steps:
-      - name: Cache repository
+      - name: Fetch repository cache
+        id: fetch-repository-cache
         uses: actions/cache@v2
         with:
           path: .git
@@ -21,11 +22,14 @@ jobs:
             deplo-git-v1-${{ runner.os }}-${{ github.ref }}-
             deplo-git-v1-${{ runner.os }}-
       - name: Checkout
-        if: steps.cache-repository.outputs.cache-hit != 'true'
+        if: steps.fetch-repository-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
         with:
           # deplo needs to refer previous commit of current HEAD to determine diff
           fetch-depth: 2
+      - name: Restore repository from cache
+        if: steps.fetch-repository-cache.outputs.cache-hit == 'true'
+        run: git reset --hard HEAD
       - name: Touch file
         run: cat README.md | md5sum > checksum.txt
       - name: Archive artifacts
@@ -42,7 +46,8 @@ jobs:
     needs: job1
     runs-on: ubuntu-latest
     steps:
-      - name: Cache repository
+      - name: Fetch repository cache
+        id: fetch-repository-cache
         uses: actions/cache@v2
         with:
           path: .git
@@ -52,11 +57,14 @@ jobs:
             deplo-git-v1-${{ runner.os }}-${{ github.ref }}-
             deplo-git-v1-${{ runner.os }}-
       - name: Checkout
-        if: steps.cache-repository.outputs.cache-hit != 'true'
+        if: steps.fetch-repository-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
         with:
           # deplo needs to refer previous commit of current HEAD to determine diff
           fetch-depth: 2
+      - name: Restore repository from cache
+        if: steps.fetch-repository-cache.outputs.cache-hit == 'true'
+        run: git reset --hard HEAD
       - name: Download checksum
         uses: actions/download-artifact@v2
         with:
