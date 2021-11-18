@@ -37,8 +37,6 @@ jobs:
       - name: Setup ssh session to debug
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
-        with:
-          sudo: false
   job2:
     name: Start CI2
     needs: job1
@@ -79,5 +77,3 @@ jobs:
       - name: Setup ssh session to debug
         if: ${{ failure() }}
         uses: mxschmitt/action-tmate@v3
-        with:
-          sudo: false
