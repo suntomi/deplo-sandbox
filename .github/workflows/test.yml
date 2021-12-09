@@ -30,8 +30,9 @@ jobs:
         run: git reset --hard HEAD
       - name: Touch file
         run: cat README.md | md5sum > checksum.txt
-      - name: Invoke helm
-        run: helm version
+      - name: show hosts
+        working-directory: /etc
+        run: cat hosts
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         with:
