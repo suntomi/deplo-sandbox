@@ -10,6 +10,7 @@ jobs:
   job1:
     name: Start CI
     runs-on: ubuntu-latest
+    container: docker:20.10
     steps:
       - name: Fetch repository cache
         id: fetch-repository-cache
@@ -46,6 +47,7 @@ jobs:
     name: Start CI2
     needs: job1
     runs-on: ubuntu-latest
+    container: docker:20.10
     steps:
       - name: Fetch repository cache
         id: fetch-repository-cache
