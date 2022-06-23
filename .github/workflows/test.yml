@@ -6,12 +6,17 @@ on:
   pull_request:
     branches: ["test"]
   
+env:
+  TEST_EVENT_DATA: ${{ toJson(github) }}
 jobs:
   job1:
     name: Start CI
     runs-on: ubuntu-latest
     container: docker:20.10
     steps:
+      - name: output event payload
+        run: |
+          echo "TEST_EVENT_DATA=[$TEST_EVENT_DATA]"
       - name: Fetch repository cache
         id: fetch-repository-cache
         uses: actions/cache@v2
